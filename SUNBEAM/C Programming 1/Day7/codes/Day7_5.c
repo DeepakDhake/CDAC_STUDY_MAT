@@ -1,0 +1,31 @@
+#include<stdio.h> 
+int arr[3][3]; // 0 
+int main( )
+{
+    //matrix representation 
+     int arr[][4]= {1,2,3,4,5,6,7,8,9}; // 2D array 
+    
+    /*  
+                [0]  [1]  [2]  [3]    
+         [0]     1    2    3    4
+
+         [1]     5    6    7    8 
+
+         [2]     9    0    0    0    
+   
+    */
+    
+    int row,col; 
+
+    for( row = 0 ; row < 3 ; row++)
+    {
+        for( col = 0 ; col < 4 ; col++)
+        {
+            printf("%4d",arr[row][col]); 
+        }
+        printf("\n"); 
+    }
+
+
+    return 0; 
+}

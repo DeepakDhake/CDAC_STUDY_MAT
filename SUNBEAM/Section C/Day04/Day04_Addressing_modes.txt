@@ -1,0 +1,326 @@
+8085 Instruction Set
+
+It is classified into 5 categories
+1. Data transfer instructions
+2. Arithmatic Instructions
+3. Logical Instructions
+4. Branching Instructions
+5. Control Instructions
+
+
+* Data transfer instructions
+1. MOV - Copy data from source to destination
+	MOV Rd, Rs
+	MOV M, Rs	M - memory addr
+	MOV Rd, M
+eg.	Mov B, C
+	MOV 0011H, D 
+
+2. MVI - Copy immediate 8 bit data to register
+	MVI Rd, data
+	MVI M, data
+eg.	MVI E, 90H
+	
+3. LDA - Load the accumulator
+	LDA <16 bit address>
+eg. LDA 1011H
+
+4. LDAX - Load accumulator indirect
+	LDAX <B/D register pair>			=> B/D contains memeory address
+		
+5. LXI - Load register pair immediate
+	LXI reg. pair , 16 bit data
+	
+6. STA - store data to memory location
+	STA <16 bit address>
+	
+7. STAX - store accumulator indirect
+	STAX B/D register pair         => B/D contains memory address
+	
+8. LHLD - Load H and L registers directly
+	LHLD <16 bit address>            => L - data pointed by memory location, H - data pointed by next memory location
+	
+9. SHLD - store H and L registers directly
+	SHLD <16 bit address>          => L - stored at memory location, H - stored at next memory location
+	
+10. XCHG - exchange HL with DE
+	XCHG
+	
+* Arithmatic Instructions
+1. ADD - add with accumulator
+	ADD R
+	ADD M	
+
+eg.	ADD B
+	A=80H 	1000 0000	
+	B=A7H	1010 0111
+		----------
+	    1	0010 0111
+
+	C = 1
+	AC = 0
+	Z = 0
+	P = 1
+	S = 0
+
+	A = FFH	1111 1111
+	B = FEH 1111 1110
+	--------1111-11-----
+	      1 1111 1101
+	
+	C = 1
+	AC = 1
+	Z = 0
+	P = 0
+	S = 1
+
+2. ADC - add register with accumulator with carry
+	ADC R
+	ADC M
+
+	ADC B
+For carry 0:
+	A=78H 	0111 1000
+	B=0AH	0000 1010
+			0
+		1111-----
+		1000 0010
+
+	C = 0
+	AC = 1
+	Z = 0
+	P = 1
+	S = 1
+
+For carry  1:
+	A=78H 	0111 1000
+	B=0AH	0000 1010
+			1
+		1111-----
+		1000 0011
+	C = 0
+	AC = 1
+	Z = 0
+	P = 0
+	S = 1
+
+3. ADI - add immediate
+	ADI 8 bit data
+
+4. ACI - add immediate with carry
+	ACI 8 bit data
+	
+5. DAD - add register pair data with HL
+	DAD reg. pair
+	
+6. SUB - Subtract register or memory from accumulator
+	SUB R
+	SUB M
+		SUB C    A=27H, C=40H
+	A - 27H	0010 0111
+	C - 40H 0100 0000
+	-------------------
+	        1110 0111		Borrow - 1
+	C = 1
+	AC = 0
+	Z = 0
+	P = 1
+	S = 1
+		
+7. SBB - Subtract reister or memory from accumulator with borrow
+	SBB R
+	SBB M
+		A=37H, B=3FH, borrow=1
+		SBB B
+		A - B - borrow = A - (B + Borrow)
+		steps B + borrow =  3FH + 1 = 40H
+				 = 0011 1111 + 1 = 0100 0000  =40H
+				2's complement of 40H = C0H
+				C0H + 37H = F7H
+				
+8. SUI - Subtract immediate
+	SUI 8 bit data
+	
+9. SBI - Subtract immediate with barrow
+	SBI 8 bit data
+		SBI 37H  borrow = 1, A=37H
+
+10. INR - increment register by 1
+	INR register
+	INR memory
+		INR D     D=7FH	=> 80H
+		
+11. INX - increment register pair by 1
+	INX register pair
+	
+12. DCR - decrement reigster  by 1
+	DCR register
+	DCR memory
+	DCR D     D=7FH		=> 7EH
+
+13. DCX - decrement register pair by 1
+	DCX register pair
+		DCX D    , DE=2000H		=> 1FFF
+		
+* Logical Instruction
+1. ANA - logical AND 
+	ANA R
+	ANA M
+		eg ANA D     A= 54H, D= 82H
+	A 54 - 0101 0100
+	D 82 - 1000 0010
+	       ---------
+	       0000 0000
+	
+	C = 0
+	AC = 0
+	Z = 1
+	P = 1
+	S = 0
+
+2. ANI - Logical AND with immediate value
+	ANI 8 bit value
+		eg ANI 97H     A= A3H
+		
+3. ORA - logical OR
+	ORA R
+	ORA M
+		ORA C     A=03H, C=81H
+
+4. ORI - Logical OR with immediate value
+	ORI 8 bit value 	
+	
+5. XRA - logical XOR
+	XRA R
+	XRA M
+		XRA D      A=77H, D=56H
+		
+6. XRI - Logical XOR with immediate value
+	XRI 8 bit value	
+		XRI A2H      A=A2H
+		
+7. RLC - rotate accumulator toward left
+	RLC 					=> all bits shifted left, Bit D7 is placed in D0 and carry
+
+	C	D7 D6 D5 D4 D3 D2 D1 D0
+	D7	D6 D5 D4 D3 D2 D1 D0 D7
+	
+		A=59H
+	C	0101 1001
+	0	1011 0010
+	
+		
+8. RRC - rotate accumulator toward right
+	RRC 					=> all bits shifted right Bit D0 is placed in D7 and carry
+		
+
+	D7 D6 D5 D4 D3 D2 D1 D0		C
+	D0 D7 D6 D5 D4 D3 D2 D1		D0
+	
+		A=AEH
+		1010 1110		C
+		0101 0111		0
+	
+		
+9. RAL - rotate accumulator through carry left
+	RAL					=>all bits shifted left bit D7 is placed in carry and carry is placed in D0
+	C D7 D6 D5 D4 D3 D2 D1 D0
+	D7 D6 D5 D4 D3 D2 D1 D0 C
+
+		eg. A=59H
+	C	0101 1001
+	0	1011 001C
+	
+		
+10. RAR - rotate accumulator through carry right
+	RAR					=>all bits shifted right bit D0 is placed in carry and carry is 						  placed in D7
+	D7 D6 D5 D4 D3 D2 D1 D0	C
+	C  D7 D6 D5 D4 D3 D2 D1 D0 
+	
+		eg. A=AEH
+		1010 1110	C
+		C101 0111	0
+		
+11. CMA - Complement accumulator
+	CMA
+		A=89H
+		
+12. CMC - complement carry
+	CMC
+	
+13. STC - set carry
+	STC
+	
+14. CMP - compare register with accumulator
+	CMP R
+	CMP M
+
+---------------------------------
+Subtracts R/M from accumulator, flags are affected, result is not stored anywhere
+Acc < R/M	=> C = 1, Z = 0
+Acc = R/M	=> C = 0, Z = 1
+Acc > R/M	=> C = 0, Z = 0
+-------------------------------	
+	
+15. CPI - Compare immediate
+	CPI 8 bit data
+---------------------------------
+Subtracts R/M from accumulator, flags are affected, result is not stored anywhere
+Acc < R/M	=> C = 1, Z = 0
+Acc = R/M	=> C = 0, Z = 1
+Acc > R/M	=> C = 0, Z = 0
+-------------------------------
+
+	
+* Branching Instruction
+1. JMP - jump unconditionaly
+	JMP 16 bit address
+	
+2. Conditional jump
+JC	- jump if carry is set
+JNC	- jump if carry is not there(reset)
+JZ	- jump if zero
+JNZ	- jump if not zero
+JPE	- jump if even parity
+JPO	- jump if odd parity
+
+3. CALL - Unconditional subroutine call
+	CALL 16 bit address
+	
+4. Conditional subroutine call	
+CC
+CNC
+CZ
+CNZ
+CPE
+CPO
+
+5. RET - return from subroutine
+	RET 	
+	
+6. Conditional return
+RC
+RNC
+RZ
+RNZ
+RPE
+RPO	
+
+7. RST - restart
+
+* Control Instructions
+1. NOP - No operation
+2. HLT - halt and wait till interrupt or reset not come
+3. DI - Disable interrupt
+4. EI - Enable interrupt
+5. RIM - read interrupt mask
+6. SIM - set interrupt mask
+
+
+
+
+
+
+
+	
+
